@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createPost } from '../store/index';
+import { createPost } from '../store/reducer/index';
 import { Card, Form, ButtonToolbar, Button } from 'react-bootstrap';
 
 class AddPostForm extends Component {
@@ -15,7 +15,7 @@ class AddPostForm extends Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  
+
   handleInput(event) {
     const { target: { name, value } } = event;
     this.setState({ [name]: value });
@@ -25,15 +25,15 @@ class AddPostForm extends Component {
     const { username, title, body } = this.state;
 
     event.preventDefault();
-    this.props.createPost(username, title, body);
-  
-    this.setState({ username: '', title: '', body: '' });
+    this.props.createPost( username, title, body);
+    this.setState({ username, title, body });
   }
 
   render() {
+
     return (
       <Card>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} >
           <Form.Group>
             <Form.Control
               name='username'
@@ -62,22 +62,33 @@ class AddPostForm extends Component {
           </Form.Group>
 
           <ButtonToolbar>
+
           <Link to='/'>
           <Button type='button'>
             Cancel
           </Button>
           </Link>
-      
+
           <Button type='submit'>
             Add Post
           </Button>
+
           </ButtonToolbar>
 
         </Form>
-
       </Card>
     )
   }
 }
 
-export default withRouter(connect(null, { createPost })( AddPostForm ));
+const mapStateToProps = state => ({
+  posts: state.posts
+});
+
+const mapDispatchToProps = dispatch => ({
+  createPost: (id, username, title, body) => {
+    dispatch(createPost(id, username, title, body));
+  }
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)( AddPostForm ));

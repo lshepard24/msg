@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { fetchPosts } from '../store/index';
+import { withRouter, Link } from 'react-router-dom';
+import { fetchPosts, fetchPost } from '../store/reducer/index';
 
 class Home extends Component {
   constructor(props) {
@@ -10,41 +10,67 @@ class Home extends Component {
     this.state = {
       posts: []
     }
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
-    console.log('state props', this.props);
+    this.props.fetchPosts();
+  }
+  
+  handleClick(event) {
+    const { posts } = this.props;
+    const post = posts.map(post => fetchPost(post.id));
+
+    this.props.history.push(`/view-post/${post.id}`);
   }
 
   render() {
-    let posts = this.props.posts;
-    let post = posts.map((post, id) => (<div key={post.id}>{post.username}</div>));
-    return(
+    const { posts } = this.props;
+
+    const post = posts.map((post, index) => {
+      return (
+      <Card key={index}>
+        <Card.Title id='post-header'>{post.title}</Card.Title>
+        <Card.Body id='post-body'>{post.body}</Card.Body>
+        <Card.Text id='post-text'>{post.username}</Card.Text>
+      </Card>)
+    });
+
+
+    return (
       <div>
-        <Card>
-          <Card.Title>
-          Message Board
-          </Card.Title>
-          <Card.Body>
-            {
-              posts.length > 0 ? post : <div>There don't seem to be any posts</div> 
-            }
-          </Card.Body>
+        <Card className='page-container'>
+          <Card.Title className='page-header'><h1>Message Board</h1></Card.Title>
+
+              <Card.Body className='page-body'>{ posts.length > 0 ? post : 
+                <Card.Text className='msg-header'>
+                  There are no posts right now... Click here to add one!
+                </Card.Text> }
+              </Card.Body>
+
+            <Link id='post-link' to='/add-post'>
+              <div id='post-link-text'>
+                Add a post!
+              </div>
+            </Link>
+
         </Card>
-        <Link to='/add-post'>Add a post!</Link>
       </div>
     )
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   posts: state.posts
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchPosts: () => {
     dispatch(fetchPosts());
+  },
+  fetchPost: id => {
+    dispatch(fetchPost(id));
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
