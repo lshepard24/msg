@@ -1,32 +1,37 @@
 import history from '../../history';
+// action types
 
 export const ADD_POST = 'ADD_POST';
 export const GET_POSTS = 'GET_POSTS'
 export const GET_POST = 'GET_POST';
-export const SHOW_POSTS = 'SHOW_POSTS';
+
+// action creators
 
 let nextId = 1;
-export const createPost = ( username, title, body) => dispatch => {
+
+export const createPost = (username, title, body) => dispatch => {
   const action = { type: ADD_POST, id: nextId++, username, title, body };
   dispatch(action);
-  history.push(`/`)
+  history.push('/')
 };
 
 export const fetchPosts = () => dispatch => {
   const action = { type: GET_POSTS };
   dispatch(action);
-}
+};
 
 export const fetchPost = id => dispatch => {
   const action = { type: GET_POST, id: id };
   dispatch(action);
   history.push(`/view-post/${id}`);
-}
+};
+
+// reducer
 
 const postReducer = (state = [], action) => {
-  let { id, username, title, body } = action;
-  let newPost = { id, username, title, body };
-  let posts = localStorage.getItem('posts');
+  const { id, username, title, body } = action;
+  const newPost = { id, username, title, body };
+  const posts = localStorage.getItem('posts');
   
   switch(action.type) {
     

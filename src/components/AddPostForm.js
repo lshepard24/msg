@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createPost } from '../store/reducer/index';
+import { createPost } from '../store/index';
 import { Card, Form, ButtonToolbar, Button } from 'react-bootstrap';
 
 class AddPostForm extends Component {
@@ -23,22 +23,27 @@ class AddPostForm extends Component {
   
   handleSubmit(event) {
     const { username, title, body } = this.state;
+    const name = username.length < 1 ? 'Anonymous' : username;
 
     event.preventDefault();
-    this.props.createPost( username, title, body);
-    this.setState({ username, title, body });
+    this.props.createPost(name, title, body);
+    this.setState({ name, title, body });
   }
 
   render() {
 
     return (
-      <Card>
-        <Form onSubmit={this.handleSubmit} >
+      <Card className='page-container'>
+      <Card.Title className='page-header'>
+        <h1>Add a Post!</h1>
+
+        <Form className='form-container' onSubmit={this.handleSubmit} >
           <Form.Group>
             <Form.Control
               name='username'
               type='text'
-              placeholder='username'
+              // required
+              placeholder='Username'
               onChange={this.handleInput}
             />
           </Form.Group>
@@ -47,7 +52,8 @@ class AddPostForm extends Component {
             <Form.Control
               name='title'
               type='text'
-              placeholder='title'
+              required
+              placeholder='Title'
               onChange={this.handleInput}
             />
           </Form.Group>
@@ -56,7 +62,8 @@ class AddPostForm extends Component {
             <Form.Control
               name='body'
               type='text'
-              placeholder='body'
+              required
+              placeholder="What's on your mind?"
               onChange={this.handleInput}
             />
           </Form.Group>
@@ -76,6 +83,7 @@ class AddPostForm extends Component {
           </ButtonToolbar>
 
         </Form>
+        </Card.Title>
       </Card>
     )
   }

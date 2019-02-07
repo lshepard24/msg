@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'react-bootstrap';
 import { withRouter, Link } from 'react-router-dom';
-import { fetchPosts, fetchPost } from '../store/reducer/index';
+import { fetchPosts, fetchPost } from '../store/index';
+import moment from 'moment';
+import { profile } from '../images/anonymous-headshot.jpg';
 
 class Home extends Component {
   constructor(props) {
@@ -29,10 +31,12 @@ class Home extends Component {
 
     const post = posts.map((post, index) => {
       return (
-      <Card key={index}>
-        <Card.Title id='post-header'>{post.title}</Card.Title>
+      <Card className='post-container' key={index}>
+        <Card.Text id='post-header'>
+          <div id='post-title'>{post.title}</div>
+          <div id='post-username'><i>{post.username}</i>, {moment().startOf('hour').fromNow()}</div>
+        </Card.Text>
         <Card.Body id='post-body'>{post.body}</Card.Body>
-        <Card.Text id='post-text'>{post.username}</Card.Text>
       </Card>)
     });
 
@@ -44,7 +48,7 @@ class Home extends Component {
 
               <Card.Body className='page-body'>{ posts.length > 0 ? post : 
                 <Card.Text className='msg-header'>
-                  There are no posts right now... Click here to add one!
+                  There aren't any posts right now... Click here to add one!
                 </Card.Text> }
               </Card.Body>
 

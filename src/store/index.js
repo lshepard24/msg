@@ -4,9 +4,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
 
 import postReducer from './reducers/post';
+import resReducer from './reducers/response';
 
 const reducer = combineReducers({
-  posts: postReducer
+  posts: postReducer,
+  responses: resReducer
 });
 
 const store = createStore(
@@ -18,5 +20,6 @@ const store = createStore(
 );
 
 export * from './reducers/post'; 
+export * from './reducers/response';
 
 export default store;
