@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { withRouter, Link, Redirect } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPost } from '../store/index';
+
 import { Card, Form, ButtonToolbar, Button } from 'react-bootstrap';
 
-class AddPostForm extends Component {
+class AddPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,16 +17,16 @@ class AddPostForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInput(event) {
-    const { target: { name, value } } = event;
+  handleInput(e) {
+    const { target: { name, value } } = e;
     this.setState({ [name]: value });
   }
   
-  handleSubmit(event) {
+  handleSubmit(e) {
     const { username, title, body } = this.state;
     const name = username.length < 1 ? 'Anonymous' : username;
 
-    event.preventDefault();
+    e.preventDefault();
     this.props.createPost(name, title, body);
     this.setState({ name, title, body });
   }
@@ -34,15 +35,13 @@ class AddPostForm extends Component {
 
     return (
       <Card className='page-container'>
-      <Card.Title className='page-header'>
-        <h1>Add a Post!</h1>
+      <Card.Title className='page-header'><h1>Add a Post!</h1>
 
         <Form className='form-container' onSubmit={this.handleSubmit} >
           <Form.Group>
             <Form.Control
               name='username'
               type='text'
-              // required
               placeholder='Username'
               onChange={this.handleInput}
             />
@@ -69,17 +68,10 @@ class AddPostForm extends Component {
           </Form.Group>
 
           <ButtonToolbar>
-
           <Link to='/'>
-          <Button type='button'>
-            Cancel
-          </Button>
+          <Button type='button'>Cancel</Button>
           </Link>
-
-          <Button type='submit'>
-            Add Post
-          </Button>
-
+          <Button type='submit'>Add Post</Button>
           </ButtonToolbar>
 
         </Form>
@@ -99,4 +91,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)( AddPostForm ));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddPost));

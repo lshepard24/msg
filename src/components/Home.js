@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card } from 'react-bootstrap';
 import { withRouter, Link } from 'react-router-dom';
 import { fetchPosts, fetchPost } from '../store/index';
 import moment from 'moment';
-import { profile } from '../images/anonymous-headshot.jpg';
+
+import { Card } from 'react-bootstrap';
 
 class Home extends Component {
   constructor(props) {
@@ -12,42 +12,35 @@ class Home extends Component {
     this.state = {
       posts: []
     }
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchPosts();
+  async componentDidMount() {
+    await this.props.fetchPosts();
   }
   
-  handleClick(event) {
-    const { posts } = this.props;
-    const post = posts.map(post => fetchPost(post.id));
-
-    this.props.history.push(`/view-post/${post.id}`);
-  }
-
   render() {
     const { posts } = this.props;
-
     const post = posts.map((post, index) => {
       return (
-      <Card className='post-container' key={index}>
-        <Card.Text id='post-header'>
+      <Link to={`view-post/${post.id}`} key={index}>
+      <Card className='post-container'>
+        <Card id='post-header'>
           <div id='post-title'>{post.title}</div>
           <div id='post-username'><i>{post.username}</i>, {moment().startOf('hour').fromNow()}</div>
-        </Card.Text>
+        </Card>
         <Card.Body id='post-body'>{post.body}</Card.Body>
-      </Card>)
+      </Card>
+      </Link>
+      )
     });
-
 
     return (
       <div>
         <Card className='page-container'>
           <Card.Title className='page-header'><h1>Message Board</h1></Card.Title>
 
-              <Card.Body className='page-body'>{ posts.length > 0 ? post : 
-                <Card.Text className='msg-header'>
+              <Card.Body className='page-body'>{ posts && posts.length > 0 ? post : 
+                <Card.Text className='page-body'>
                   There aren't any posts right now... Click here to add one!
                 </Card.Text> }
               </Card.Body>

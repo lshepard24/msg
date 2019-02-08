@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ViewPost = props => {
-  console.log('props', props);
+const ViewPost = ({fetchPost}) => {
+  console.log('props', fetchPost);
   return (
     <div>
       Hello
@@ -10,17 +10,5 @@ const ViewPost = props => {
     </div>
   );
 };
-
-// class ViewPost extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-
-//     }
-//   }
-//   componentDidMount() {
-
-//   }
-// }
 
 export default ViewPost;

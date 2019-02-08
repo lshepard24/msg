@@ -1,12 +1,10 @@
 import history from '../../history';
 
 // action types
-
 export const ADD_RESPONSE = 'ADD_RESPONSE';
 export const GET_RESPONSES = 'GET_RESPONSES';
 
 // action creators
-
 export const createResponse = (username, body) => dispatch => {
   const postId = localStorage.getItem('posts');
   const action = { type: ADD_RESPONSE, id: postId, username, body };
@@ -20,7 +18,6 @@ export const fetchResponses = () => dispatch => {
 };
 
 // reducer 
-
 const resReducer = (state = [], action) => {
   const { postId, username, body } = action;
   const newRes = { postId, username, body };

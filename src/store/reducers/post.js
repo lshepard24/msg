@@ -1,18 +1,16 @@
 import history from '../../history';
-// action types
 
+// action types
 export const ADD_POST = 'ADD_POST';
 export const GET_POSTS = 'GET_POSTS'
 export const GET_POST = 'GET_POST';
 
 // action creators
-
-let nextId = 1;
-
 export const createPost = (username, title, body) => dispatch => {
-  const action = { type: ADD_POST, id: nextId++, username, title, body };
+  let nextId = 0;
+  const action = { type: ADD_POST, id: ++nextId, username, title, body };
   dispatch(action);
-  history.push('/')
+  history.push(`/view-post/${nextId}`)
 };
 
 export const fetchPosts = () => dispatch => {
@@ -27,20 +25,20 @@ export const fetchPost = id => dispatch => {
 };
 
 // reducer
-
 const postReducer = (state = [], action) => {
   const { id, username, title, body } = action;
   const newPost = { id, username, title, body };
-  const posts = localStorage.getItem('posts');
+  const storedPosts = localStorage.getItem('posts');
+  const posts = storedPosts ? JSON.parse(storedPosts) : [];
   
   switch(action.type) {
     
     case ADD_POST:
       localStorage.setItem('posts', JSON.stringify([...state, newPost]));
-      return [...state, newPost];
+      return [...state, newPost] || null;
     
     case GET_POSTS: 
-      return JSON.parse(posts);
+      return posts;
     
     case GET_POST:
       return posts.filter(post => post.id === action.id);
